@@ -30,13 +30,19 @@ const Display = (() => {
 
     const input = document.querySelector('#location_input')
     const btn = document.querySelector('#location_btn')
+    const errorMsg = document.querySelector('.error_msg')
 
     const search = function(evt) {
-
         evt.preventDefault()
-        let city = input.value
-        showReport(city)
-        input.value = ''
+
+        if (input.checkValidity()) {
+            errorMsg.textContent = ''
+            let city = input.value
+            showReport(city)
+            input.value = ''
+        } else {
+            errorMsg.textContent = 'Please enter correct location'
+        }
 
     }
 
