@@ -23,6 +23,10 @@ const Display = (() => {
         const currentReport = await getReport(location)
         if (currentReport == Error) {
             console.log('Wrong location I guess')
+            report.address = ''
+            report.temp = ''
+            report.conditions = ''
+            report.precip = ''
         } else {
             console.table(report)
         }
@@ -31,17 +35,43 @@ const Display = (() => {
     const input = document.querySelector('#location_input')
     const btn = document.querySelector('#location_btn')
     const errorMsg = document.querySelector('.error_msg')
+    const reportDiv = document.querySelector('.report_div')
 
-    const search = function(evt) {
+    const search = async function(evt) {
         evt.preventDefault()
+        let city = input.value
+        const re = new RegExp("^([a-zA-Z]{1,})$");
 
-        if (input.checkValidity()) {
+        if (re.test(city)) {
             errorMsg.textContent = ''
-            let city = input.value
-            showReport(city)
-            input.value = ''
+            await showReport(city)
+
+            if (report.address != '') {
+                const addressP = document.createElement('p')
+                const tempP = document.createElement('p')
+                const descrP = document.createElement('p')
+                const precipP = document.createElement('p')
+                reportDiv.textContent = ''
+                addressP.textContent = `Location: ${report.address}`
+                tempP.textContent = `Temperature: ${report.temp}`
+                descrP.textContent = `Current conditions: ${report.conditions}`
+                if (report.precip != null) {
+                    precipP.textContent = `Precipitation: ${report.precip.toString()}`
+                } else {
+                    precipP.textContent = `Precipitation: none`
+                }
+                reportDiv.appendChild(addressP)
+                reportDiv.appendChild(tempP)
+                reportDiv.appendChild(descrP)
+                reportDiv.appendChild(precipP)
+    
+                input.value = ''
+            } else {
+                reportDiv.textContent = ''
+            }
         } else {
             errorMsg.textContent = 'Please enter correct location'
+            reportDiv.textContent = ''
         }
 
     }
