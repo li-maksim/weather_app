@@ -4,10 +4,20 @@ import './style.css'
 const report = {}
 
 const getReport = async function(location) {
+
+    const locationArr = location.split('')
+    locationArr[0] = locationArr[0].toString().toUpperCase()
+    for (let i = 0; i < locationArr.length; i++) {
+        if (locationArr[i] == ' ') {
+            locationArr[i] = '-'
+        }
+    }
+    const locationStr = locationArr.join('')
+
     try {
-        const resp = await fetch(`https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${location}?key=KWEZ732TPU3Y92EY4JUZLPFH2`, {mode: 'cors'})
+        const resp = await fetch(`https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${locationStr}?key=KWEZ732TPU3Y92EY4JUZLPFH2`, {mode: 'cors'})
         const data = await resp.json()
-        report.address = await data.address
+        report.address = await data.resolvedAddress
         report.temp = await data.currentConditions.temp
         report.conditions = await data.currentConditions.conditions
         report.precip = await data.currentConditions.preciptype
@@ -40,7 +50,7 @@ const Display = (() => {
     const search = async function(evt) {
         evt.preventDefault()
         let city = input.value
-        const re = new RegExp("^([a-zA-Z]{1,})$");
+        const re = new RegExp("^([a-zA-Z\\-\\s+]{1,})$");
 
         if (re.test(city)) {
             errorMsg.textContent = ''
