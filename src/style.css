@@ -38,10 +38,17 @@ body {
 .btn {
     background: none;
     border: none;
-    min-width: 25px;
-    min-height: 10px;
+    width: 35px;
+    height: 20px;
     background-color: #fff;
     transition: 0.4s;
+}
+
+.header .btn {
+
+    width: 35px;
+    height: 35px;
+
 }
 
 .btn:hover {
