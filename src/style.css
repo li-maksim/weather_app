@@ -52,6 +52,10 @@ body {
     transform: scale(110%);
 }
 
+.btn.clicked {
+    background-color: #459393;
+}
+
 .error_msg {
     color: red;
 }
